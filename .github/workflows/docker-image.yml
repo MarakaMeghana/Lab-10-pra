@@ -1,8 +1,4 @@
-name: Docker Image CI
-
-on:
-  push:
-    branches: [ "main" ]name: Docker Fullstack CI
+name: Docker Fullstack CI
 
 on:
   push:
@@ -13,6 +9,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'  # Only push images on push, not PR
 
     steps:
       - name: Checkout source code
@@ -43,16 +40,12 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-frontend:latest
 
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-
-  build:
-
+  build-test:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'  # Only run on PR
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v4
+      
+      - name: Test build main Dockerfile
+        run: docker build . --file Dockerfile --tag test-image:$(date +%s)
