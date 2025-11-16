@@ -30,7 +30,9 @@ jobs:
           context: ./STUDENTAPI-SPRINGBOOT
           file: ./STUDENTAPI-SPRINGBOOT/backend.Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-backend:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/docker-backend:latest
+          no-cache: true
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
@@ -38,7 +40,9 @@ jobs:
           context: ./STUDENTAPI-REACT
           file: ./STUDENTAPI-REACT/frontend.Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/docker-frontend:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/docker-frontend:latest
+          no-cache: true
 
   build-test:
     runs-on: ubuntu-latest
